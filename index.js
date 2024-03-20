@@ -1,9 +1,9 @@
 const express = require('express');
 const axios = require('axios');
-// const dotenv = require('dotenv');
+const dotenv = require('dotenv');
 const { exec } = require('child_process');
 
-// dotenv.config();
+dotenv.config();
 
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const app = express();
@@ -18,10 +18,12 @@ const tmdbApi = axios.create({
 });
 
 
-app.get('/populate-movies', async (req, res) => {
+app.get('/popular-movies', async (req, res) => {
   try {
     const response = await tmdbApi.get('/movie/popular');
     const movies = response.data.results;
+
+    return res.json({ movies });
 
     // TODO: RETURN MOVIES WITHOUT SAVING TO DATABASE
     // const insertMovieQueries = movies.map(movie => {
