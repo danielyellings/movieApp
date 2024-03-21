@@ -2,8 +2,9 @@ const express = require('express');
 const axios = require('axios');
 const dotenv = require('dotenv');
 const { exec } = require('child_process');
-
 dotenv.config();
+
+<script src="/js/myJS.js"></script>
 
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const app = express();
@@ -16,6 +17,8 @@ const tmdbApi = axios.create({
     'Content-Type': 'application/json;charset=utf-8'
   }
 });
+
+
 
 
 app.get('/popular-movies', async (req, res) => {
