@@ -1,14 +1,15 @@
 const express = require('express');
+const path = require('path');
 const axios = require('axios');
 const dotenv = require('dotenv');
 const { exec } = require('child_process');
 dotenv.config();
 
-<script src="/js/myJS.js"></script>
-
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(express.static(path.join(__dirname, 'public')))
 
 const tmdbApi = axios.create({
   baseURL: TMDB_BASE_URL,
