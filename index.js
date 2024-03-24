@@ -10,7 +10,16 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 //creating pool connections
-const pool = new Pool();
+var pool = new Pool({
+  database: 'movieapp',
+  user: 'daniyaryerkinov',
+  password: process.env.DB_PASSWORD,
+  port: 5432,
+  max: 20, 
+  idleTimeoutMillis: 1000, 
+  connectionTimeoutMillis: 1000,
+  maxUses: 7500,
+})
 
 app.use(express.static(path.join(__dirname, 'public')))
 
@@ -26,6 +35,8 @@ app.get('/popular-movies', async (req, res) => {
   try {
     //getting connections from pool
     const client = await pool.connect();
+
+    //sending request to TMDB API
     const response = await tmdbApi.get('/movie/popular');
     const movies = response.data.results;
 
