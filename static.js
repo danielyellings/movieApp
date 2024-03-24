@@ -2,12 +2,15 @@ const express = require('express');
 const path = require('path');
 const axios = require('axios');
 const dotenv = require('dotenv');
-const { exec } = require('child_process');
+const { Pool } = require('pg')
 dotenv.config();
 
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+//creating pool connections
+const pool = new Pool();
 
 app.use(express.static(path.join(__dirname, 'public')))
 
@@ -19,11 +22,15 @@ const tmdbApi = axios.create({
   }
 });
 
-
 app.get('/popular-movies', async (req, res) => {
   try {
+    //getting connections from pool
+    const client = await pool.connect();
     const response = await tmdbApi.get('/movie/popular');
     const movies = response.data.results;
+
+    //release connection to pool
+    client.release();
 
     return res.json({ movies });
   } catch (error) {
