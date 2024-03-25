@@ -34,14 +34,14 @@ const tmdbApi = axios.create({
 app.get('/popular-movies', async (req, res) => {
   try {
     //getting connections from pool
-    const client = await pool.connect();
+    // const client = await pool.connect();
 
     //sending request to TMDB API
     const response = await tmdbApi.get('/movie/popular');
     const movies = response.data.results;
 
     //release connection to pool
-    client.release();
+    // client.release();
 
     return res.json({ movies });
   } catch (error) {
@@ -49,6 +49,25 @@ app.get('/popular-movies', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while fetching movies' });
   }
 });
+
+//post request to log into main page
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  if ( username === 'user' && password === 'password') {
+    req.session.isLoggedIn = true;
+    res.redirect('/main-page')
+  } else {
+    res.send('Incorrect username or password')
+  }
+})
+
+app.get('/main-page', (req, res) => {
+  if (!req.session.isLoggedIn) {
+    res.redirect('/login')
+  } else {
+    res.render('main-page', { movies: moviesData })
+  }
+})
 
 app.listen(PORT, (error) => {
   if (!error) {
