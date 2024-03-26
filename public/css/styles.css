@@ -120,3 +120,6 @@ button{
 .social i{
   margin-right: 4px;
 }
+#login {
+    display: none;
+}

@@ -12,25 +12,21 @@
         <div class="shape"></div>
         <div class="shape"></div>
     </div>
-    <form>
+    <!-- Logging form into site -->
+    <form action="/login" method="POST" id="login-form">
         <h3>Login to MovieApp</h3>
 
         <label for="username">Username</label>
-        <input type="text" placeholder="Email or Phone" id="username">
+        <input type="text" name="username" placeholder="Email or Phone" id="username">
 
         <label for="password">Password</label>
-        <input type="password" placeholder="Password" id="password">
+        <input type="password" name="password" placeholder="Password" id="password">
 
-        <button>Log In</button>
+        <button type="submit">Log In</button>
         <div class="social">
           <div class="go"><i class="fab fa-google"></i>  Google</div>
-          <div class="fb"><i class="fab fa-facebook"></i>  Facebook</div>
+          <div class="fb"><i class="fab fa-telegram"></i>  Telegram</div>
         </div>
-    </form>
-    <form action="/login" method="POST">
-        <input type="text" name="username" placeholder="login" required>
-        <input type="password" name="password" placeholder="password" required>
-        <button type="submit">Enter</button>
     </form>
 </body>
 </html>

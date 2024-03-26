@@ -3,10 +3,12 @@ const path = require('path');
 const axios = require('axios');
 const dotenv = require('dotenv');
 const { Pool } = require('pg')
+const bodyParser = require('body-parser')
 dotenv.config();
 
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const app = express();
+app.use(bodyParser.json());
 const PORT = process.env.PORT || 3000;
 
 //creating pool connections
@@ -19,6 +21,11 @@ var pool = new Pool({
   idleTimeoutMillis: 1000, 
   connectionTimeoutMillis: 1000,
   maxUses: 7500,
+})
+
+//sendFile go here
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/index.html'))
 })
 
 app.use(express.static(path.join(__dirname, 'public')))
