@@ -1,32 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>MovieApp</title>
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MovieApp</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <div class="background">
-        <div class="shape"></div>
-        <div class="shape"></div>
-    </div>
-    <!-- Logging form into site -->
-    <form action="/login" method="POST" id="login-form">
-        <h3>Login to MovieApp</h3>
+  <div class="background">
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
 
+  <div class="register-btn">
+    <label class="toggle-label">
+      <span class="toggle-text">Register</span>
+    </label>
+  </div>
+
+  <div class="form-container">
+    <!-- Login form -->
+    <form action="/login" method="POST" id="login-form" class="active">
+      <h3>Login to MovieApp</h3>
+      <div class="form-group">
         <label for="username">Username</label>
         <input type="text" name="username" placeholder="Email or Phone" id="username">
-
+      </div>
+      <div class="form-group">
         <label for="password">Password</label>
         <input type="password" name="password" placeholder="Password" id="password">
-
-        <button type="submit">Log In</button>
-        <div class="social">
-          <div class="go"><i class="fab fa-google"></i>  Google</div>
-          <div class="fb"><i class="fab fa-telegram"></i>  Telegram</div>
-        </div>
+      </div>
+      <button type="submit">Log In</button>
+      <div class="social">
+        <div class="go"><i class="fab fa-google"></i> Google</div>
+        <div class="fb"><i class="fab fa-telegram"></i> Telegram</div>
+      </div>
     </form>
+
+    <!-- Registration form -->
+    <form action="/register" method="POST" id="registration-form">
+      <h3>Register for MovieApp</h3>
+      <div class="form-group">
+        <label for="reg-username">Username</label>
+        <input type="text" name="username" placeholder="Username" id="reg-username" required>
+      </div>
+      <div class="form-group">
+        <label for="reg-password">Password</label>
+        <input type="password" name="password" placeholder="Password" id="reg-password" required>
+      </div>
+      <div class="form-group">
+        <label for="reg-email">Email</label>
+        <input type="email" name="email" placeholder="Email" id="reg-email" required>
+      </div>
+      <button type="submit">Register</button>
+    </form>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById('login-form');
+    const registrationForm = document.getElementById('registration-form');
+    const registerBtn = document.querySelector('.register-btn');
+    const toggleLabel = document.querySelector('.toggle-label');
+
+    let showRegistrationForm = false;
+
+    registerBtn.addEventListener('click', () => {
+      showRegistrationForm = !showRegistrationForm;
+      loginForm.classList.toggle('active');
+      registrationForm.classList.toggle('active');
+      toggleLabel.classList.toggle('active');
+    });
+  </script>
 </body>
 </html>
