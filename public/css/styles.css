@@ -75,7 +75,7 @@
     transform: translateX(800px);
   }
   
-  form-container.active {
+  .form-container {
     height: 580px;
   }
 

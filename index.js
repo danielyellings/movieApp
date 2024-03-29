@@ -1,5 +1,5 @@
 const express = require('express');
-const db = require('./db.js');
+const db = require('./configs/db.js');
 const path = require('path');
 const axios = require('axios');
 const dotenv = require('dotenv');
@@ -9,9 +9,20 @@ dotenv.config();
 const { pgTable, serial, text, varchar } = require("drizzle-orm/pg-core");
 const { drizzle } = require("drizzle-orm/node-postgres");
 
-// const pool = new Pool({
-//   connectionString: "postgres://user:password@host:port/db",
-// });
+
+require('./configs/dotenv.js')
+const client = require('./configs/db.js')
+
+client.connect((err) => {
+  if (err) {
+    console.log(err)
+  } else {
+    console.log("Data logging initiated!")
+  }
+})
+
+const user = require('./routes/users.js')
+app.use('/user', user) //route for /user endpoint of API  
 
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const app = express();
@@ -19,7 +30,7 @@ app.use(bodyParser.json());
 const PORT = process.env.PORT || 3000;
 
 //creating pool connections
-var pool = new Pool({
+const pool = new Pool({
   database: 'movieapp',
   user: 'daniyaryerkinov',
   password: process.env.DB_PASSWORD,
