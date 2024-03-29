@@ -63,7 +63,7 @@
     const loginForm = document.getElementById('login-form');
     const registrationForm = document.getElementById('registration-form');
     const registerBtn = document.querySelector('.register-btn');
-    const toggleLabel = document.querySelector('.toggle-label');
+    const toggleText = document.querySelector('.toggle-text');
 
     let showRegistrationForm = false;
 
@@ -71,7 +71,8 @@
       showRegistrationForm = !showRegistrationForm;
       loginForm.classList.toggle('active');
       registrationForm.classList.toggle('active');
-      toggleLabel.classList.toggle('active');
+      toggleText.textContent = showRegistrationForm ? 'Login' : 'Register';
+    //   document.getElementById("registrationForm").style.height = "600px";
     });
   </script>
 </body>
