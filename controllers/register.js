@@ -22,10 +22,9 @@ exports.register  =  async (req, res) => {
     const  user  = {
     name,
     email,
-    phonenumber,
     password: hash,
     };
-    var  flag  =  1; //Declaring a flag
+    const  flag  =  1; //Declaring a flag
 
 //Inserting data into the database
 
