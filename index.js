@@ -3,15 +3,23 @@ const db = require('./configs/db.js');
 const path = require('path');
 const axios = require('axios');
 const dotenv = require('dotenv');
-const { Pool } = require('pg')
-const bodyParser = require('body-parser')
+const { Pool, Client } = require('pg');
+const bodyParser = require('body-parser');
 dotenv.config();
 const { pgTable, serial, text, varchar } = require("drizzle-orm/pg-core");
 const { drizzle } = require("drizzle-orm/node-postgres");
 
 
 require('./configs/dotenv.js')
-const client = require('./configs/db.js')
+
+// Initialize PostgreSQL client
+const client = new Client({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
+});
 
 client.connect((err) => {
   if (err) {
@@ -21,11 +29,12 @@ client.connect((err) => {
   }
 })
 
+const app = express();
+
 const user = require('./routes/users.js')
 app.use('/user', user) //route for /user endpoint of API  
 
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
-const app = express();
 app.use(bodyParser.json());
 const PORT = process.env.PORT || 3000;
 
@@ -94,6 +103,7 @@ app.post('/register', (req, res) => {
       console.error('Error during executing the request', err)
       res.status(500).json({ error: "Error during new user's registration"})
     } else {
+       // If user with the same username or email exists, give error
       if (results.rows.length > 0) {
         res.status(400).json({ error: 'User with these username or email already registered'})
       } else {
