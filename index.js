@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('./configs/db.js');
 const path = require('path');
+const bcrypt = require('bcrypt');
 const axios = require('axios');
 const dotenv = require('dotenv');
 const { Pool, Client } = require('pg');
@@ -94,31 +95,31 @@ app.get('/popular-movies', async (req, res) => {
   }
 });
 
-//registration logic
-app.post('/register', (req, res) => {
-  const { username, password } = req.body;
 
-  pool.query('SELECT FROM users WHERE username = $1 OR email = $2', [username, password], (err, results) => {
-    if (err) {
-      console.error('Error during executing the request', err)
-      res.status(500).json({ error: "Error during new user's registration"})
-    } else {
-       // If user with the same username or email exists, give error
-      if (results.rows.length > 0) {
-        res.status(400).json({ error: 'User with these username or email already registered'})
-      } else {
-        pool.query('INSERT INTO users (username, password, email) VALUES ($1, $2, $3)', [username, password, email], (err, results) => {
-          if (err) {
-            console.error('Error during registratin of new user', err)
-            res.status(500).json({ error: 'Error during registration of new user'})
-          } else {
-            res.send('Registration is successful!')
-          }
-        })
-      }
+
+//registration logic
+app.post('/register', async (req, res) => {
+  const { username, email, password } = req.body;
+
+  try {
+    // Check if user already registered
+    const userExistsQuery = 'SELECT * FROM users WHERE email = $1';
+    const { rows } = await pool.query(userExistsQuery, [email]);
+    if (rows.length > 0) {
+      return res.status(400).json({ message: 'User with this is email is already exists' });
     }
-  })
-})
+
+    // Inserting new USER
+    const insertUserQuery = 'INSERT INTO users (username, email, password) VALUES ($1, $2, $3)';
+    await pool.query(insertUserQuery, [username, email, password]);
+
+    res.status(201).json({ message: 'User successfully registered!' });
+  } catch (error) {
+    console.error('Error during user registration:', error);
+    res.status(500).json({ message: 'Error during user registration' });
+  }
+});
+
 
 //post request to log into main page
 app.post('/login', (req, res) => {

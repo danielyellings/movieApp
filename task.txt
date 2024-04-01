@@ -22,3 +22,29 @@
 - Фронтенд - HTML, CSS (рекомендую https://tailwindcss.com/) ну и чистый JavaScript
 
 В БД у тебя будут таблицы для пользователей и таблица favorites - в favorites ты хранишь ID фильмов из TMDB API, название фильмов итд хранить там не надо. Имея в БД айдишники фильмов, которые пользователь добавил в избранное ты сможешь с сервера послать запрос на API с этими айдишниками и получить инфу об этих фильмах
+
+
+app.post('/register', (req, res) => {
+  const { username, email, password } = req.body;
+
+  pool.query('SELECT FROM users WHERE username = $1 OR email = $2', [username, password], (err, results) => {
+    if (err) {
+      console.error('Error during executing the request', err)
+      res.status(500).json({ error: "Error during new user's registration"})
+    } else {
+       // If user with the same username or email exists, give error
+      if (results.rows.length > 0) {
+        res.status(400).json({ error: 'User with these username or email already registered'})
+      } else {
+        pool.query('INSERT INTO users (username, password, email) VALUES ($1, $2, $3)', [username, password, email], (err, results) => {
+          if (err) {
+            console.error('Error during registratin of new user', err)
+            res.status(500).json({ error: 'Error during registration of new user'})
+          } else {
+            res.send('Registration is successful!')
+          }
+        })
+      }
+    }
+  })
+})
