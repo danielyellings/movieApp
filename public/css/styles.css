@@ -33,13 +33,13 @@
   
   .shape:first-child {
     background: linear-gradient(#1845ad, #23a2f6);
-    left: 300px;
+    left: 450px;
     top: 20px;
   }
   
   .shape:last-child {
     background: linear-gradient(to right, #ff512f, #f09819);
-    right: 300px;
+    right: 450px;
     bottom: 20px;
   }
   

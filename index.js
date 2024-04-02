@@ -100,7 +100,7 @@ app.get('/popular-movies', async (req, res) => {
 //registration logic
 app.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
-
+  console.log('My data:', { username, email, password})
   try {
     // Check if user already registered
     const userExistsQuery = 'SELECT * FROM users WHERE email = $1';
@@ -112,7 +112,6 @@ app.post('/register', async (req, res) => {
     // Inserting new USER
     const insertUserQuery = 'INSERT INTO users (username, email, password) VALUES ($1, $2, $3)';
     await pool.query(insertUserQuery, [username, email, password]);
-
     res.status(201).json({ message: 'User successfully registered!' });
   } catch (error) {
     console.error('Error during user registration:', error);

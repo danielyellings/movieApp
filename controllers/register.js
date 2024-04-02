@@ -28,7 +28,7 @@ exports.register  =  async (req, res) => {
 
 //Inserting data into the database
 
-client.query(`INSERT INTO users (name, email, password) VALUES ($1,$2,$3,$4);`, [user.name, user.email, user.password], (err) => {
+client.query(`INSERT INTO users (username, email, password) VALUES ($1,$2,$3);`, [user.username, user.email, user.password], (err) => {
     if (err) {
         flag  =  0; //If user is not inserted is not inserted to database assigning flag as 0/false.
         console.error(err);
