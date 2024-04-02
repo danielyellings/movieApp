@@ -76,6 +76,12 @@ const tmdbApi = axios.create({
   }
 });
 
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
 app.get('/popular-movies', async (req, res) => {
   try {
     //getting connections from pool
