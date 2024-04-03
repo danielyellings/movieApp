@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const db = require('./configs/db.js');
 const path = require('path');
 const bcrypt = require('bcrypt');
@@ -10,8 +11,37 @@ dotenv.config();
 const { pgTable, serial, text, varchar } = require("drizzle-orm/pg-core");
 const { drizzle } = require("drizzle-orm/node-postgres");
 
+const app = express();
 
-require('./configs/dotenv.js')
+var corsOptions = {
+  origin: "https://localhost:8081"
+}
+
+app.use(cors(corsOptions));
+
+// parse requests of content-type - application/json
+app.use(express.json());
+
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
+
+//simple route
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to MovieAPP!"})
+})
+
+//set port, listen for requests
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, (error) => {
+  if (!error) {
+    console.log(`Server is running on port ${PORT}`);
+  } else {
+    console.log('Error occurred', error);
+  }
+});
+
+
+require('./configs/dotenv.js');
 
 // Initialize PostgreSQL client
 const client = new Client({
@@ -30,14 +60,12 @@ client.connect((err) => {
   }
 })
 
-const app = express();
 
 const user = require('./routes/users.js')
 app.use('/user', user) //route for /user endpoint of API  
 
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 app.use(bodyParser.json());
-const PORT = process.env.PORT || 3000;
 
 //creating pool connections
 const pool = new Pool({
@@ -50,16 +78,6 @@ const pool = new Pool({
   connectionTimeoutMillis: 1000,
   maxUses: 7500,
 })
-
-// app.get('/', async (req, res) => {
-//   try {
-//     const result = await db.query('SELECT * FROM users');
-//     res.json(result.rows);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send('Internal Server Error');
-//   }
-// });
 
 //sendFile go here
 app.get('/', (req, res) => {
@@ -145,10 +163,4 @@ app.get('/main-page', (req, res) => {
   }
 })
 
-app.listen(PORT, (error) => {
-  if (!error) {
-    console.log(`Server is running on port ${PORT}`);
-  } else {
-    console.log('Error occurred', error);
-  }
-});
+
