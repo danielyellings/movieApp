@@ -129,7 +129,7 @@ app.post('/register', async (req, res) => {
 //post request to log into main page
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
-  if ( username === 'user' && password === 'password') {
+  if ( username === 'username' && password === 'password') {
     req.session.isLoggedIn = true;
     res.redirect('/main-page')
   } else {
