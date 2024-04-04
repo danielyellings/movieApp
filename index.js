@@ -51,16 +51,6 @@ const pool = new Pool({
   maxUses: 7500,
 })
 
-// app.get('/', async (req, res) => {
-//   try {
-//     const result = await db.query('SELECT * FROM users');
-//     res.json(result.rows);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send('Internal Server Error');
-//   }
-// });
-
 //sendFile go here
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/index.html'))
@@ -127,15 +117,31 @@ app.post('/register', async (req, res) => {
 
 
 //post request to log into main page
-app.post('/login', (req, res) => {
-  const { username, password } = req.body;
-  if ( username === 'user' && password === 'password') {
-    req.session.isLoggedIn = true;
-    res.redirect('/main-page')
-  } else {
-    res.send('Incorrect username or password')
-  }
-})
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    // Getting hashed password from the database based on email
+    const getPassword = 'SELECT password FROM users WHERE email = $1';
+    const { rows } = await pool.query(getPassword, [email]);
+    if (rows.length === 0) {
+      return res.status(401).json({ message: 'User not found' });
+    }
+    const hashedPassword = rows[0].password;
+      // Compare provided password with hashed password
+      bcrypt.compareSync(password, hashedPassword); 
+      const passwordMatch = await bcrypt.compare(password, hashedPassword);
+      if (passwordMatch) {
+        // Passwords match, SUCCESS!
+        return res.status(200).json({ message: 'Login successful' });
+      } else {
+        // Passwords don't match message
+        return res.status(401).json({ message: 'Incorrect password' });
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
 
 app.get('/main-page', (req, res) => {
   if (!req.session.isLoggedIn) {
