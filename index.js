@@ -133,7 +133,7 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'User not found' });
     }
     const hashedPassword = rows[0].password;
-      // Compare provided password with hashed password 
+      // Compare provided password with hashed passwords 
       const passwordMatch = await bcrypt.compare(password, hashedPassword);
       console.log(passwordMatch);
       if (passwordMatch) {
