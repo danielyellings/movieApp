@@ -58,6 +58,11 @@
       <button type="submit">Register</button>
     </form>
   </div>
+  
+  <div id="main-page">
+    <h1>Trending Movies</h1>
+
+  </div>
 
   <script>
     const loginForm = document.getElementById('login-form');
@@ -73,6 +78,8 @@
       registrationForm.classList.toggle('active');
       toggleText.textContent = showRegistrationForm ? 'Login' : 'Register';
     });
+
+    //fetch and display trending movies from TMDB API
   </script>
 </body>
 </html>
