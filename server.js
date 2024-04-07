@@ -1,5 +1,4 @@
 const express = require('express');
-const cors = require('cors');
 const db = require('./configs/db.js');
 const path = require('path');
 const bcrypt = require('bcrypt');
@@ -11,37 +10,8 @@ dotenv.config();
 const { pgTable, serial, text, varchar } = require("drizzle-orm/pg-core");
 const { drizzle } = require("drizzle-orm/node-postgres");
 
-const app = express();
 
-var corsOptions = {
-  origin: "https://localhost:8081"
-}
-
-app.use(cors(corsOptions));
-
-// parse requests of content-type - application/json
-app.use(express.json());
-
-// parse requests of content-type - application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: true }));
-
-//simple route
-app.get("/", (req, res) => {
-  res.json({ message: "Welcome to MovieAPP!"})
-})
-
-//set port, listen for requests
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, (error) => {
-  if (!error) {
-    console.log(`Server is running on port ${PORT}`);
-  } else {
-    console.log('Error occurred', error);
-  }
-});
-
-
-require('./configs/dotenv.js');
+require('./configs/dotenv.js')
 
 // Initialize PostgreSQL client
 const client = new Client({
@@ -60,12 +30,14 @@ client.connect((err) => {
   }
 })
 
+const app = express();
 
 const user = require('./routes/users.js')
 app.use('/user', user) //route for /user endpoint of API  
 
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 app.use(bodyParser.json());
+const PORT = process.env.PORT || 3000;
 
 //creating pool connections
 const pool = new Pool({
@@ -151,15 +123,6 @@ app.post('/register', async (req, res) => {
 //post request to log into main page
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-<<<<<<< HEAD:server.js
-  if ( username === 'username' && password === 'password') {
-    req.session.isLoggedIn = true;
-    res.redirect('/main-page')
-  } else {
-    res.send('Incorrect username or password')
-  }
-})
-=======
   console.log(req.body)
   try {
     // Getting hashed password from the database based on email
@@ -185,7 +148,6 @@ app.post('/login', async (req, res) => {
       res.status(500).json({ message: 'Server error' });
     }
   });
->>>>>>> mybranch:index.js
 
 app.get('/main-page', (req, res) => {
   if (!req.session.isLoggedIn) {
@@ -195,8 +157,6 @@ app.get('/main-page', (req, res) => {
   }
 })
 
-<<<<<<< HEAD:server.js
-=======
 app.listen(PORT, (error) => {
   if (!error) {
     console.log(`Server is running on port ${PORT}`);
@@ -204,9 +164,3 @@ app.listen(PORT, (error) => {
     console.log('Error occurred', error);
   }
 });
-
-
-
-
->>>>>>> mybranch:index.js
-
