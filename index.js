@@ -92,11 +92,12 @@ app.get('/popular-movies', async (req, res) => {
 });
 
 
+app.use(express.json());
 
 //registration logic
 app.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
-  console.log('My data:', { username, email, password})
+  console.log('Registration data:', { username, email, password})
   try {
     // Check if user already registered
     const userExistsQuery = 'SELECT * FROM users WHERE email = $1';
@@ -104,10 +105,13 @@ app.post('/register', async (req, res) => {
     if (rows.length > 0) {
       return res.status(400).json({ message: 'User with this is email is already exists' });
     }
-
-    // Inserting new USER
+    //hash password
+    const saltRounds = 10
+    const hashedPassword = await bcrypt.hash(password, saltRounds)
+    console.log('Hash:', hashedPassword);
+    // Inserting new USER with hashed password
     const insertUserQuery = 'INSERT INTO users (username, email, password) VALUES ($1, $2, $3)';
-    await pool.query(insertUserQuery, [username, email, password]);
+    await pool.query(insertUserQuery, [username, email, hashedPassword]);
     res.status(201).json({ message: 'User successfully registered!' });
   } catch (error) {
     console.error('Error during user registration:', error);
@@ -118,18 +122,20 @@ app.post('/register', async (req, res) => {
 
 //post request to log into main page
 app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
+  console.log(req.body)
   try {
     // Getting hashed password from the database based on email
-    const getPassword = 'SELECT password FROM users WHERE email = $1';
-    const { rows } = await pool.query(getPassword, [email]);
+    const getPassword = 'SELECT password FROM users WHERE username = $1';
+    const { rows } = await pool.query(getPassword, [username]);
+    console.log(rows);
     if (rows.length === 0) {
       return res.status(401).json({ message: 'User not found' });
     }
     const hashedPassword = rows[0].password;
-      // Compare provided password with hashed password
-      bcrypt.compareSync(password, hashedPassword); 
+      // Compare provided password with hashed password 
       const passwordMatch = await bcrypt.compare(password, hashedPassword);
+      console.log(passwordMatch);
       if (passwordMatch) {
         // Passwords match, SUCCESS!
         return res.status(200).json({ message: 'Login successful' });
@@ -158,3 +164,8 @@ app.listen(PORT, (error) => {
     console.log('Error occurred', error);
   }
 });
+
+
+
+
+
