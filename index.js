@@ -91,6 +91,11 @@ app.get('/popular-movies', async (req, res) => {
   }
 });
 
+app.get('/', async (req, res) => {
+  res.send("Welcome to TMDB MOVIEAPP!")
+
+})
+
 
 app.use(express.json());
 
@@ -148,14 +153,6 @@ app.post('/login', async (req, res) => {
       res.status(500).json({ message: 'Server error' });
     }
   });
-
-app.get('/main-page', (req, res) => {
-  if (!req.session.isLoggedIn) {
-    res.redirect('/login')
-  } else {
-    res.render('main-page', { movies: moviesData })
-  }
-})
 
 app.listen(PORT, (error) => {
   if (!error) {

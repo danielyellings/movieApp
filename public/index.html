@@ -15,52 +15,52 @@
     <div class="shape"></div>
   </div>
 
-<div class="register-btn">
-  <label class="toggle-label">
-    <span class="toggle-text">Register</span>
-  </label>
-</div>
+  <div class="register-btn">
+    <label class="toggle-label">
+      <span class="toggle-text">Register</span>
+    </label>
+  </div>
 
-<div class="form-container">
-  <!-- Login form -->
-  <form action="/login" method="POST" id="login-form" class="active">
-    <h3>Login to MovieApp</h3>
-    <div class="form-group">
-      <label for="username">Username</label>
-      <input type="text" name="username" placeholder="Email or Phone" id="username">
-    </div>
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input type="password" name="password" placeholder="Password" id="password">
-    </div>
-    <button type="submit">Log In</button>
-    <div class="social">
-      <div class="go"><i class="fab fa-google"></i> Google</div>
-      <div class="fb"><i class="fab fa-telegram"></i> Telegram</div>
-    </div>
-  </form>
+  <div class="form-container">
+    <!-- Login form -->
+    <form action="/login" method="POST" id="login-form" class="active">
+      <h3>Login to MovieApp</h3>
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" name="username" placeholder="Email or Phone" id="username">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" name="password" placeholder="Password" id="password">
+      </div>
+      <button type="submit">Log In</button>
+      <div class="social">
+        <div class="go"><i class="fab fa-google"></i> Google</div>
+        <div class="fb"><i class="fab fa-telegram"></i> Telegram</div>
+      </div>
+    </form>
 
-  <!-- Registration form -->
-<form action="/register" method="POST" id="registration-form" enctype="application/x-www-form-urlencoded">
-  <h3>Register for MovieApp</h3>
-    <div class="form-group">
-      <label for="reg-username">Username</label>
-      <input type="text" name="username" placeholder="Username" id="reg-username" required>
-    </div>
-    <div class="form-group">
-      <label for="reg-password">Password</label>
-      <input type="password" name="password" placeholder="Password" id="reg-password" required>
-    </div>
-    <div class="form-group">
-      <label for="reg-email">Email</label>
-      <input type="email" name="email" placeholder="Email" id="reg-email" required>
-    </div>
-    <button type="submit">Register</button>
-  </form>
-</div>
+    <!-- Registration form -->
+    <form action="/register" method="POST" id="registration-form" enctype="application/x-www-form-urlencoded">
+      <h3>Register for MovieApp</h3>
+      <div class="form-group">
+        <label for="reg-username">Username</label>
+        <input type="text" name="username" placeholder="Username" id="reg-username" required>
+      </div>
+      <div class="form-group">
+        <label for="reg-password">Password</label>
+        <input type="password" name="password" placeholder="Password" id="reg-password" required>
+      </div>
+      <div class="form-group">
+        <label for="reg-email">Email</label>
+        <input type="email" name="email" placeholder="Email" id="reg-email" required>
+      </div>
+      <button type="submit">Register</button>
+    </form>
+  </div>
 
-<div id="main-page">
-  <h1>Trending Movies</h1>
+  <div id="main-page-container" class="hidden">
+    <h1>Trending Movies</h1>
     <br><br>
     <div class="inputContainer">
       <input type="text" id="searchInput" placeholder="Search for a movie...">
@@ -68,68 +68,68 @@
     </div>
     <br><br>
     <div class="wrapper">
-      <button id="nowPlayingBtn>" class="button1">Now Playing</button>
-      <button id="topRatedBtn>" class="button1">Top Rated</button>
+      <button id="nowPlayingBtn" class="button1">Now Playing</button>
+      <button id="topRatedBtn" class="button1">Top Rated</button>
     </div>
     <div class="results"></div>
     <hr>
     <footer>
       <div id="copyRight">
-        Copyright &copy; 2023 All Rights Reserved
-        </div>
-        <div id="lastFooter">
+        Copyright &copy; 2024 All Rights Reserved
+      </div>
+      <div id="lastFooter">
         <ul>
-        <li>
-        <a href="">About Us</a>
-        </li>
-        <li>
-        <a href="">Contact Us</a>
-        </li>
-        <li>
-        <a href="">Terms</a>
-        </li>
-        <li>
-        <a href="">License</a>
-        </li>
+          <li><a href="">About Us</a></li>
+          <li><a href="">Contact Us</a></li>
+          <li><a href="">Terms</a></li>
+          <li><a href="">License</a></li>
         </ul>
-        </div>
+      </div>
     </footer>
-</div>
+  </div>
 
-<script>
-  const loginForm = document.getElementById('login-form');
-  const registrationForm = document.getElementById('registration-form');
-  const registerBtn = document.querySelector('.register-btn');
-  const toggleText = document.querySelector('.toggle-text');
+  <script>
+    const loginForm = document.getElementById('login-form');
+    const registrationForm = document.getElementById('registration-form');
+    const registerBtn = document.querySelector('.register-btn');
+    const toggleText = document.querySelector('.toggle-text');
+    const mainPageContainer = document.getElementById('main-page-container');
 
-  let showRegistrationForm = false;
+    let showRegistrationForm = false;
 
-  registerBtn.addEventListener('click', () => {
-    showRegistrationForm = !showRegistrationForm;
-    loginForm.classList.toggle('active');
-    registrationForm.classList.toggle('active');
-    toggleText.textContent = showRegistrationForm ? 'Login' : 'Register';
-  });
+    registerBtn.addEventListener('click', () => {
+      showRegistrationForm = !showRegistrationForm;
+      loginForm.classList.toggle('active');
+      registrationForm.classList.toggle('active');
+      toggleText.textContent = showRegistrationForm ? 'Login' : 'Register';
+    });
 
-  //fetch and display trending movies from TMDB API
-  fetch('https://api.themoviedb.org/3/trending/movie/week?api_key=process.env.MOVIE_DB_API_KEY')
-  .then(response => response.json())
-  .then(data => {
-    const trendingMoviesContainer = document.getElementById('trending-movies')
-    data.results.forEach(movie => {
-      const movieElement = document.createElement('div')
-      movieElement.textContent = movie.title
-      trendingMoviesContainer.appendChild(movieElement)
-    })
-  })
-  .catch(error => {
-    console.error('Error fetching trending movies: ', error)
-  })
+    document.getElementById('login-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      
+      const formData = new FormData(loginForm)
+      const username = formData.get('username')
+      const password = formData.get('password')
 
-  document.getElementById('login-form').addEventListener('submit', (event) => {
-  event.preventDefault(); 
-  window.location.href = '/';
-  });
-</script>
+      try {
+        const response = await fetch('/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ username, password })
+        })
+
+        if (response.ok) {
+          // If login is successful, show the main page
+          mainPageContainer.classList.add('active');
+        } else {
+          console.error('Login failed:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+      }
+    });
+  </script>
 </body>
 </html>
