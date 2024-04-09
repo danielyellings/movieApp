@@ -197,5 +197,16 @@ button:hover {
 }
 
 #main-page-container.active {
-  display: block;
+  display: flex;
+  justify-content: center;
+}
+.home-page .form-container {
+  display: none;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
 }

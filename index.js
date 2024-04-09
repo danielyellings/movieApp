@@ -130,7 +130,7 @@ app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   console.log(req.body)
   try {
-    // Getting hashed password from the database based on email
+    // Getting hashed password from the database
     const getPassword = 'SELECT password FROM users WHERE username = $1';
     const { rows } = await pool.query(getPassword, [username]);
     console.log(rows);
@@ -138,7 +138,7 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'User not found' });
     }
     const hashedPassword = rows[0].password;
-      // Compare provided password with hashed passwords 
+      // Compare password with hashed passwords 
       const passwordMatch = await bcrypt.compare(password, hashedPassword);
       console.log(passwordMatch);
       if (passwordMatch) {

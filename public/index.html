@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/styles.css">
 </head>
-<body>
+<body class="homePage">
   <div class="background">
     <div class="shape"></div>
     <div class="shape"></div>
@@ -122,12 +122,14 @@
 
         if (response.ok) {
           // If login is successful, show the main page
-          mainPageContainer.classList.add('active');
+          mainPageContainer.classList.add('active')
+          loginForm.classList.remove('active')
+          registrationForm.classList.remove('active')
         } else {
           console.error('Login failed:', response.statusText);
         }
       } catch (error) {
-        console.error('Error during login:', error);
+        console.error('Error during login:', error)
       }
     });
   </script>
