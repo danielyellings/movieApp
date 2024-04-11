@@ -210,3 +210,7 @@ button:hover {
     opacity: 0;
   }
 }
+
+#main-page-container {
+  z-index: 99999;
+}
