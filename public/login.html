@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - MovieApp</title>
+</head>
+<body>
+    <div class="form-container">
+        <!-- Login form -->
+        <form action="/login" method="POST" id="login-form" class="active">
+          <h3>Login to MovieApp</h3>
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" name="username" placeholder="Email or Phone" id="username">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" placeholder="Password" id="password">
+          </div>
+          <button type="submit">Log In</button>
+          <div class="social">
+            <div class="go"><i class="fab fa-google"></i> Google</div>
+            <div class="fb"><i class="fab fa-telegram"></i> Telegram</div>
+          </div>
+        </form>
+</body>
+</html>
