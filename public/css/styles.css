@@ -193,7 +193,7 @@ button:hover {
 }
 
 #main-page-container {
-  display: none;
+  display: block;
 }
 
 #main-page-container.active {

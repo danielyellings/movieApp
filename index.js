@@ -52,8 +52,26 @@ const pool = new Pool({
 })
 
 //sendFile go here
+// Route for the login page
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/login.html'))
+})
+
+//Route for registration page
+
+app.get('/signup', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/signup.html'))
+})
+
+//Route for the main page
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/index.html'))
+})
+
+//Route for the favorites page
+app.get('/favorites', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/favorites.html'))
 })
 
 app.use(express.static(path.join(__dirname, 'public')))
@@ -90,12 +108,6 @@ app.get('/popular-movies', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while fetching movies' });
   }
 });
-
-app.get('/', async (req, res) => {
-  res.send("Welcome to TMDB MOVIEAPP!")
-
-})
-
 
 app.use(express.json());
 
