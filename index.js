@@ -10,7 +10,6 @@ dotenv.config();
 const { pgTable, serial, text, varchar } = require("drizzle-orm/pg-core");
 const { drizzle } = require("drizzle-orm/node-postgres");
 
-
 require('./configs/dotenv.js')
 
 // Initialize PostgreSQL client
@@ -39,7 +38,7 @@ const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 app.use(bodyParser.json());
 const PORT = process.env.PORT || 3000;
 
-//creating pool connections
+// Creating pool connections
 const pool = new Pool({
   database: 'movieapp',
   user: 'daniyaryerkinov',
@@ -51,29 +50,24 @@ const pool = new Pool({
   maxUses: 7500,
 })
 
-//sendFile go here
-// Route for the login page
+// Роутинг для отображения HTML страниц
 app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/login.html'))
+  res.sendFile(path.join(__dirname, 'public', 'login.html'))
 })
-
-//Route for registration page
 
 app.get('/signup', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/signup.html'))
+  res.sendFile(path.join(__dirname, 'public', 'signup.html'))
 })
-
-//Route for the main page
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/index.html'))
+  res.sendFile(path.join(__dirname, 'public', 'index.html'))
 })
 
-//Route for the favorites page
 app.get('/favorites', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/favorites.html'))
+  res.sendFile(path.join(__dirname, 'public', 'favorites.html'))
 })
 
+// Подключение статических файлов
 app.use(express.static(path.join(__dirname, 'public')))
 
 const tmdbApi = axios.create({
@@ -84,24 +78,15 @@ const tmdbApi = axios.create({
   }
 });
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+// Middleware для обработки формата данных
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-// parse application/json
-app.use(bodyParser.json())
-
+// Получение популярных фильмов
 app.get('/popular-movies', async (req, res) => {
   try {
-    //getting connections from pool
-    // const client = await pool.connect();
-
-    //sending request to TMDB API
     const response = await tmdbApi.get('/movie/popular');
     const movies = response.data.results;
-
-    //release connection to pool
-    // client.release();
-
     return res.json({ movies });
   } catch (error) {
     console.error('An error occurred while fetching movies:', error);
@@ -109,24 +94,19 @@ app.get('/popular-movies', async (req, res) => {
   }
 });
 
-app.use(express.json());
-
-//registration logic
+// Регистрация пользователей
 app.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
   console.log('Registration data:', { username, email, password})
   try {
-    // Check if user already registered
     const userExistsQuery = 'SELECT * FROM users WHERE email = $1';
     const { rows } = await pool.query(userExistsQuery, [email]);
     if (rows.length > 0) {
-      return res.status(400).json({ message: 'User with this is email is already exists' });
+      return res.status(400).json({ message: 'User with this email already exists' });
     }
-    //hash password
     const saltRounds = 10
     const hashedPassword = await bcrypt.hash(password, saltRounds)
     console.log('Hash:', hashedPassword);
-    // Inserting new USER with hashed password
     const insertUserQuery = 'INSERT INTO users (username, email, password) VALUES ($1, $2, $3)';
     await pool.query(insertUserQuery, [username, email, hashedPassword]);
     res.status(201).json({ message: 'User successfully registered!' });
@@ -136,13 +116,11 @@ app.post('/register', async (req, res) => {
   }
 });
 
-
-//post request to log into main page
+// Вход пользователей
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   console.log(req.body)
   try {
-    // Getting hashed password from the database
     const getPassword = 'SELECT password FROM users WHERE username = $1';
     const { rows } = await pool.query(getPassword, [username]);
     console.log(rows);
@@ -150,22 +128,20 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'User not found' });
     }
     const hashedPassword = rows[0].password;
-      // Compare password with hashed passwords 
-      const passwordMatch = await bcrypt.compare(password, hashedPassword);
-      console.log(passwordMatch);
-      if (passwordMatch) {
-        // Passwords match, SUCCESS!
-        return res.status(200).json({ message: 'Login successful' });
-      } else {
-        // Passwords don't match message
-        return res.status(401).json({ message: 'Incorrect password' });
-      }
-    } catch (error) {
-      console.error('Error during login:', error);
-      res.status(500).json({ message: 'Server error' });
+    const passwordMatch = await bcrypt.compare(password, hashedPassword);
+    console.log(passwordMatch);
+    if (passwordMatch) {
+      return res.status(200).json({ message: 'Login successful' });
+    } else {
+      return res.status(401).json({ message: 'Incorrect password' });
     }
-  });
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
+// Запуск сервера
 app.listen(PORT, (error) => {
   if (!error) {
     console.log(`Server is running on port ${PORT}`);

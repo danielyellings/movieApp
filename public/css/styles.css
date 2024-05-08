@@ -58,6 +58,7 @@ body {
   margin-top: -20px;
 }
 
+/* Общие стили для форм */
 form {
   height: 600px;
   width: 400px;
@@ -199,33 +200,4 @@ button:hover {
 #main-page-container.active {
   display: flex;
   justify-content: center;
-}
-.home-page .form-container {
-  display: none;
-}
-
-/* Animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-}
-
-.home-page .form-container {
-  display: none;
-}
-
-#main-page-container.active {
-  display: flex;
-  justify-content: center;
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
 }
