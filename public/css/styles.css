@@ -80,10 +80,6 @@ form {
   height: 580px;
 }
 
-form.active {
-  transform: translateX(0);
-}
-
 form h3 {
   font-size: 32px;
   font-weight: 500;
