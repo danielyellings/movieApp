@@ -1,99 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MovieApp</title>
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie App</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="homePage">
-  <div class="background">
-    <div class="shape"></div>
-    <div class="shape"></div>
-  </div>
-
-  <div class="register-btn">
-    <label class="toggle-label">
-      <span class="toggle-text">Register</span>
-    </label>
-  </div>
-
-  <div id="main-page-container" class="hidden">
-    <h1>MovieApp Movies</h1>
-    <br><br>
-    <div class="inputContainer">
-      <input type="text" id="searchInput" placeholder="Search for a movie...">
-      <button id="searchBtn">Search</button>
-    </div>
-    <br><br>
-    <div class="wrapper">
-      <button id="nowPlayingBtn" class="button1">Now Playing</button>
-      <button id="topRatedBtn" class="button1">Top Rated</button>
-    </div>
-    <div class="results"></div>
-    <hr>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Movie App</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/favorites">Favorites</a></li>
+                <li><a href="/login">Login</a></li>
+                <li><a href=/signup>Signup</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="hero">
+            <h2>Welcome to Movie App</h2>
+            <p>Discover and watch your favorite movies.</p>
+        </section>
+        <section class="movies">
+            <!-- Movie cards will be dynamically added here -->
+        </section>
+    </main>
     <footer>
-      <div id="copyRight">
-        Copyright &copy; 2024 All Rights Reserved
-      </div>
-      <div id="lastFooter">
-        <ul>
-          <li><a href="">About Us</a></li>
-          <li><a href="">Contact Us</a></li>
-          <li><a href="">Terms</a></li>
-          <li><a href="">License</a></li>
-        </ul>
-      </div>
+        <p>&copy; 2024 Movie App</p>
     </footer>
-  </div>
-
-  <script>
-    const loginForm = document.getElementById('login-form');
-    const registrationForm = document.getElementById('registration-form');
-    const registerBtn = document.querySelector('.register-btn');
-    const toggleText = document.querySelector('.toggle-text');
-    const mainPageContainer = document.getElementById('main-page-container');
-
-    let showRegistrationForm = false;
-
-    registerBtn.addEventListener('click', () => {
-      showRegistrationForm = !showRegistrationForm;
-      loginForm.classList.toggle('active');
-      registrationForm.classList.toggle('active');
-      toggleText.textContent = showRegistrationForm ? 'Login' : 'Register';
-    });
-
-    document.getElementById('login-form').addEventListener('submit', async (event) => {
-      event.preventDefault();
-      
-      const formData = new FormData(loginForm)
-      const username = formData.get('username')
-      const password = formData.get('password')
-
-      try {
-        const response = await fetch('/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ username, password })
-        })
-
-        if (response.ok) {
-          // If login is successful, show the main page
-          mainPageContainer.classList.add('active')
-          loginForm.classList.remove('active')
-          registrationForm.classList.remove('active')
-        } else {
-          console.error('Login failed:', response.statusText);
-        }
-      } catch (error) {
-        console.error('Error during login:', error)
-      }
-    });
-  </script>
+    <script src="script.js"></script>
 </body>
 </html>

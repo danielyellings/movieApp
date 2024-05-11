@@ -82,7 +82,7 @@ const tmdbApi = axios.create({
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// Получение популярных фильмов
+// get popular movies
 app.get('/popular-movies', async (req, res) => {
   try {
     const response = await tmdbApi.get('/movie/popular');
@@ -94,7 +94,7 @@ app.get('/popular-movies', async (req, res) => {
   }
 });
 
-// Регистрация пользователей
+// registration
 app.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
   console.log('Registration data:', { username, email, password})
@@ -116,7 +116,7 @@ app.post('/register', async (req, res) => {
   }
 });
 
-// Вход пользователей
+// login
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   console.log(req.body)
@@ -141,7 +141,7 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// Запуск сервера
+// run server
 app.listen(PORT, (error) => {
   if (!error) {
     console.log(`Server is running on port ${PORT}`);
