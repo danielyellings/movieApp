@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 const { Pool, Client } = require('pg');
 const bodyParser = require('body-parser');
 dotenv.config();
+const ejs = require('ejs');
 const { pgTable, serial, text, varchar } = require("drizzle-orm/pg-core");
 const { drizzle } = require("drizzle-orm/node-postgres");
 
@@ -78,21 +79,52 @@ const tmdbApi = axios.create({
   }
 });
 
+
+const options = {
+  method: 'GET',
+  url: 'https://api.themoviedb.org/3/account/21107427/lists?page=1',
+  headers: {
+    accept: 'application/json',
+    Authorization: 'Bearer f1d75120f31392ccafdd1cda406eb0f2'
+  }
+};
+
 // Middleware для обработки формата данных
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+app.get('/', (req, res) => {
+  res.render('pages/index')
+})
+
+
 
 // get popular movies
 app.get('/popular-movies', async (req, res) => {
   try {
     const response = await tmdbApi.get('/movie/popular');
     const movies = response.data.results;
-    return res.json({ movies });
+    res.render('movies', { movies });
   } catch (error) {
     console.error('An error occurred while fetching movies:', error);
     res.status(500).json({ error: 'An error occurred while fetching movies' });
   }
 });
+
+// get list of movies
+app.get('/movies', async (req, res) => {
+  try {
+    const response = await tmdbApi.get('/movie/list'); 
+    const movies = response.data.results;
+    return res.json({ movies });
+  } catch (error) {
+    console.error('An error occurred while fetching movies:', error);
+    res.status(500).json({ error: 'An error occurred while fetching movies' });
+  }
+})
 
 // registration
 app.post('/register', async (req, res) => {
