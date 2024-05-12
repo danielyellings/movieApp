@@ -94,6 +94,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.set('view engine', 'ejs');
+app.engine('ejs', require('ejs').__express);
 app.set('views', path.join(__dirname, 'views'));
 
 app.get('/', (req, res) => {
@@ -107,7 +108,7 @@ app.get('/popular-movies', async (req, res) => {
   try {
     const response = await tmdbApi.get('/movie/popular');
     const movies = response.data.results;
-    res.render('movies', { movies });
+    res.render('index.ejs', { movies });
   } catch (error) {
     console.error('An error occurred while fetching movies:', error);
     res.status(500).json({ error: 'An error occurred while fetching movies' });
@@ -119,7 +120,7 @@ app.get('/movies', async (req, res) => {
   try {
     const response = await tmdbApi.get('/movie/list'); 
     const movies = response.data.results;
-    return res.json({ movies });
+    res.render('index.ejs', { movies });
   } catch (error) {
     console.error('An error occurred while fetching movies:', error);
     res.status(500).json({ error: 'An error occurred while fetching movies' });
