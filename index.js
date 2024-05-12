@@ -116,7 +116,7 @@ app.get('/popular-movies', async (req, res) => {
 });
 
 // get list of movies
-app.get('/movies', async (req, res) => {
+app.get('/', async (req, res) => {
   try {
     const response = await tmdbApi.get('/movie/list'); 
     const movies = response.data.results;
