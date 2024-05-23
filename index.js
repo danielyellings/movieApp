@@ -79,16 +79,6 @@ const tmdbApi = axios.create({
   }
 });
 
-
-const options = {
-  method: 'GET',
-  url: 'https://api.themoviedb.org/3/account/21107427/lists?page=1',
-  headers: {
-    accept: 'application/json',
-    Authorization: 'Bearer f1d75120f31392ccafdd1cda406eb0f2'
-  }
-};
-
 // Middleware для обработки формата данных
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -116,10 +106,12 @@ app.get('/popular-movies', async (req, res) => {
 });
 
 // get list of movies
-app.get('/', async (req, res) => {
+
+app.get('/movies', async (req, res) => {
   try {
-    const response = await tmdbApi.get('/movie/list'); 
-    const movies = response.data.results;
+    const response = await tmdbApi.get("/genre/movie/list");
+    console.log('TMDB Response: ', response.data)
+    const movies = response.data.genres;
     res.render('index.ejs', { movies });
   } catch (error) {
     console.error('An error occurred while fetching movies:', error);

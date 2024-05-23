@@ -4,13 +4,13 @@
     <title>Movie List</title>
 </head>
 <body>
-    <h1>Popular Movies</h1>
+    <h1>Movies</h1>
     <ul>
         <% movies.forEach(function(movie) { %>
             <li>
                 <h2><%= movie.title %></h2>
-                <p>Release Date: <%= movie.release_date %></p>
-                <p>Overview: <%= movie.overview %></p>
+                <p>Genre: <%= movie.name %></p>
+                <p>Id: <%= movie.id %></p>
             </li>
         <% }) %>
     </ul>
